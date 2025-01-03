@@ -8,7 +8,7 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
-app.use("/api/v1", router);
+app.use("/api/v2", router);
 
 const PORT = process.env.PORT || 5000;
 
