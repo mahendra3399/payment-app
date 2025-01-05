@@ -3,6 +3,7 @@ import zod from "zod";
 import { User } from "../models/user.model.js";
 import { JWT_SECRET } from "../config.js";
 import jwt from "jsonwebtoken";
+import { authMiddleware } from "../middleware.js";
 
 const userRouter = express.Router();
 
@@ -16,6 +17,13 @@ const signupBody = zod.object({
 const signinBody = zod.object({
     username: zod.string().email(),
     password: zod.string().min(4)
+})
+
+const updateBody = zod.object({
+    username: zod.string().email().optional(),
+    password: zod.string().min(4).optional(),
+    firstName: zod.string().min(1).max(20).optional(),
+    lastName: zod.string().min(1).max(20).optional(),
 })
 
 userRouter.post("/signup", async (req, res) => {
@@ -62,5 +70,13 @@ userRouter.post("/signin", async (req, res) => {
     return;
 })
 
+userRouter.put("/", authMiddleware, async (req, res) => {
+    const { success } = updateBody.safeParse(req.body);
+    if(!success) {
+        return res.status(411).json({ error: "Invalid request body"});
+    }
+    await User.updateOne({ _id: req.userId }, req.body);
+    res.status(200).json({ message: "User updated successfully"});
+})
 
 export default userRouter;
