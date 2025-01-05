@@ -14,10 +14,26 @@ const signupBody = zod.object({
 })
 
 userRouter.post("/signup", async (req, res) => {
-    const { username, password, firstName, lastName } = signupBody.parse(req.body);
-    const user = new User({ username, password, firstName, lastName });
-    await user.save();
-    res.send({ message: "User created" });
+    const { success } = signupBody.safeParse(req.body);
+    if (!success) {
+        return res.status(400).json({ error: "Invalid request body" });
+    }
+    const existingUser = await User.findOne({ username: req.body.username });
+    if (existingUser) {
+        return res.status(409).json({ error: "User already exists" });
+    }
+    const user = await User.create({
+        username: req.body.username,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+    })
+    const userId = user._id;
+    const token = jwt.sign({ userId}, JWT_SECRET);
+    res.status(201).json({ 
+        message: "User created successfully",
+        token,
+     });
 });
 
 
