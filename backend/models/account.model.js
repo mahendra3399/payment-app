@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const accountSchema = new mongoose.Schema({
+const accountSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId, // Reference to User model
         ref: 'User',
@@ -13,3 +13,5 @@ export const accountSchema = new mongoose.Schema({
 });
 
 const Account = mongoose.model('Account', accountSchema);
+
+export default Account;
