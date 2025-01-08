@@ -1,7 +1,7 @@
-import {JWT_SECRET} from './config';
+import {JWT_SECRET} from './config.js';
 import jwt from 'jsonwebtoken';
 
-export const authMiddleware = (req,res,next) => {
+const authMiddleware = (req,res,next) => {
     const authHeader = req.header.authrization;
     if(!authHeader || !authHeader.startsWith('Bearer')){
         res.status(403).send('Unauthorized');
@@ -21,3 +21,5 @@ export const authMiddleware = (req,res,next) => {
         return res.status(403).send('Unauthorized');
     }
 }
+
+export default authMiddleware;
