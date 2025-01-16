@@ -113,4 +113,19 @@ userRouter.get("/bulk", async (req,res)=> {
     })
 })
 
+userRouter.get("/firstname", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({
+            firstName: user.firstName
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default userRouter;
