@@ -1,26 +1,29 @@
-import {JWT_SECRET} from './config.js';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from './config.js';
 
-const authMiddleware = (req,res,next) => {
+const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
-    if(!authHeader || !authHeader.startsWith('Bearer ')){
-        res.status(403).send('Unauthorized');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.log('Authorization header missing or invalid');
+        return res.status(403).send('Unauthorized01');
     }
-    
+
     const token = authHeader.split(' ')[1];
-    try {
-       const decoded = jwt.verify(token,JWT_SECRET);
-       if(decoded){
-           req.userId = decoded.userId;
-           next();
-       }
-       else{
-          return res.status(403).send('Unauthorized');
-       }
-    } catch (error) {
-        return res.status(403).send('Unauthorized');
+    if (!token) {
+        return res.status(403).send('Unauthorized02');
     }
-}
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        req.userId = decoded.userId;
+
+        next();
+    } catch (error) {
+        console.log('Token verification failed:', error.message); // Log the error message
+        return res.status(403).send('Unauthorized04');
+    }
+};
 
 export default authMiddleware;

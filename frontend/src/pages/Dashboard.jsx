@@ -40,7 +40,7 @@ export const Dashboard = () => {
 
                 setFirstName(response.data.firstName);
             } catch (error) {
-                console.error('Error fetching balance:', error);
+                console.error('Error fetching firstName:', error);
             }
         };
 

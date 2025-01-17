@@ -10,6 +10,9 @@ accountRouter.get("/balance", authMiddleware, async (req, res) => {
        const account = await Account.findOne({
         userId : req.userId
        });
+       if(!account) {
+              return res.status(404).json({error: "Account not found for userId "+ req.userId});
+       }
 
        res.json({
           balance: account.balance
