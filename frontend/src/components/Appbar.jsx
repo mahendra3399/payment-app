@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from "../context/AuthContext";
 
 export const Appbar = ({ firstName }) => {
     const navigate = useNavigate();
+    const { setAuthUser } = useAuthContext();
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('pay-user');
+        setAuthUser(null);
         navigate('/signin');
     };
 

@@ -6,6 +6,7 @@ import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
+import { useAuthContext } from "../context/AuthContext";
 
 export const Signup = () => {
     const [firstName, setFirstName] = useState("");
@@ -13,6 +14,7 @@ export const Signup = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { setAuthUser } = useAuthContext();
 
     return <div className="bg-slate-300 h-screen flex justify-center">
     <div className="flex flex-col justify-center">
@@ -40,6 +42,8 @@ export const Signup = () => {
                 lastName,
                 password
               });
+              localStorage.setItem("pay-user", JSON.stringify(response.data));
+			        setAuthUser(response.data);
               localStorage.setItem("token", response.data.token)
               navigate("/dashboard")
             } catch (error) {
