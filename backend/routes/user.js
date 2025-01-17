@@ -62,21 +62,26 @@ userRouter.post("/signin", async (req, res) => {
     if(!success) {
         return res.status(400).json({ error: "Invalid request body"});
     }
-    const user = User.findOne({
+    const user = await User.findOne({
         username: req.body.username,
         password: req.body.password
     })
-    if(!user) {
-        return res.status(401).json({error: "Invalid username or password"});
+    
+    if (user) {
+        const token = jwt.sign({
+            userId: user._id
+        }, JWT_SECRET);
+
+        res.json({
+            token: token
+        })
+        return;
     }
-    const userId = user._id;
-    const token = jwt.sign({ userId }, JWT_SECRET);
-   
-    res.status(200).json({
-        message: "User signed in successfully",
-        token,
-    });
-    return;
+
+
+    res.status(411).json({
+        message: "Error while logging in"
+    })
 })
 
 userRouter.put("/", authMiddleware, async (req, res) => {

@@ -29,9 +29,9 @@ export const Signin = () => {
               const response = await axios.post("http://localhost:3000/api/v1/user/signin", {
                 username,
                 password
-              });
-              localStorage.setItem("token", response.data.token)
-              navigate("/dashboard")
+            });
+            localStorage.setItem("token", response.data.token);
+            navigate("/dashboard");
             } catch (error) {
               console.log(error)
             }
