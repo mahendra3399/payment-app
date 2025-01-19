@@ -2,9 +2,12 @@ import express from "express";
 import zod from "zod";
 import  User  from "../models/user.model.js";
 import  Account  from "../models/account.model.js";
-import { JWT_SECRET } from "../config.js";
+// import { JWT_SECRET } from "../config.js";
 import jwt from "jsonwebtoken";
 import  authMiddleware  from "../middleware.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const userRouter = express.Router();
 
@@ -49,7 +52,7 @@ userRouter.post("/signup", async (req, res) => {
         balance: 1 + Math.random() * 10000,
     });
 
-    const token = jwt.sign({ userId}, JWT_SECRET);
+    const token = jwt.sign({ userId}, process.env.JWT_SECRET);
     
     res.status(201).json({ 
         message: "User created successfully",
@@ -70,7 +73,7 @@ userRouter.post("/signin", async (req, res) => {
     if (user) {
         const token = jwt.sign({
             userId: user._id
-        }, JWT_SECRET);
+        }, process.env.JWT_SECRET);
 
         res.json({
             token: token

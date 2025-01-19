@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from './config.js';
+// import { JWT_SECRET } from './config.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -15,7 +18,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         req.userId = decoded.userId;
 
