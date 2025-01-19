@@ -7,6 +7,8 @@ import { SubHeading } from "../components/SubHeading"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../context/AuthContext";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Signin = () => {
   const [username, setUsername] = useState("");
@@ -42,6 +44,7 @@ export const Signin = () => {
                                // Assuming the response contains user data
                               navigate("/dashboard");
                           } catch (error) {
+                              toast.error("Invalid username or password");
                               console.log(error);
                           }
                       }} label={"Sign in"} />
@@ -49,6 +52,7 @@ export const Signin = () => {
                   <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/signup"} />
               </div>
           </div>
+          <ToastContainer />
       </div>
   );
 };
