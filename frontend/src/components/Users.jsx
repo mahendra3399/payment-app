@@ -26,9 +26,9 @@ export const Users = () => {
         fetchData();
     }, [filter]);
 
-    // Wait for `authUser` to be initialized
+    
     if (!authUser) {
-        return <div>Loading...</div>; // Or any loading spinner/placeholder
+        return <div>Loading...</div>; 
     }
 
     const filteredUsers = users.filter(user => user._id !== authUser._id);
